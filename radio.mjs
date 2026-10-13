@@ -27,16 +27,24 @@ const PIPE = '\\\\.\\pipe\\dshtools-radio';
 const PIPE_ARG = '--input-ipc-server=' + PIPE;
 
 function findMpv() {
-  const shim = 'C:\\Users\\Administrator\\scoop\\shims\\mpv.exe';
+  // 1. PATH 里找
+  const pathDirs = (process.env.PATH || '').split(';');
+  for (const d of pathDirs) {
+    const p = path.join(d, 'mpv.exe');
+    if (fs.existsSync(p)) return p;
+  }
+  // 2. scoop 常见安装路径（用 %USERPROFILE%，不硬编码用户名）
+  const userProfile = process.env.USERPROFILE || 'C:\\Users\\Administrator';
+  const shim = path.join(userProfile, 'scoop', 'shims', 'mpv.exe');
   if (fs.existsSync(shim)) return shim;
-  const apps = 'C:\\Users\\Administrator\\scoop\\apps\\mpv';
+  const apps = path.join(userProfile, 'scoop', 'apps', 'mpv');
   if (fs.existsSync(apps)) {
     for (const v of fs.readdirSync(apps)) {
       const p = path.join(apps, v, 'mpv.exe');
       if (fs.existsSync(p)) return p;
     }
   }
-  throw new Error('找不到 mpv.exe，先运行：scoop install mpv');
+  throw new Error('找不到 mpv.exe，先运行：scoop install mpv  或  choco install mpv');
 }
 
 function loadStations() {

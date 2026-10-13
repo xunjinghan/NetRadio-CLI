@@ -221,8 +221,8 @@ NetRadio-CLI/
 ## 相关项目
 
 - [bounty-forge](https://github.com/xunjinghan/bounty-forge) — AI 驱动漏洞挖掘知识库与实战工具集
-- [VulnLab](https://github.com/xunjinghan/VulnLab) — 自研 Web 漏洞靶场
-- [VulnHunt](https://github.com/xunjinghan/VulnHunt) — AI 自动化漏洞挖掘工具集
+- [WebVulnLab](https://github.com/xunjinghan/WebVulnLab) — 自研 Web 漏洞靶场
+- [VulnScope](https://github.com/xunjinghan/VulnScope) — AI 自动化漏洞挖掘工具集
 
 ---
 
