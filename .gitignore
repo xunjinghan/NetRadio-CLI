@@ -1,0 +1,37 @@
+﻿# 运行时生成
+*.db
+*.log
+*.bak
+.state.json
+uploads/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 敏感配置
+config.json
+.env
+*.key
+*.pem
+credentials.json

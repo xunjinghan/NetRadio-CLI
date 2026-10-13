@@ -1,0 +1,42 @@
+[
+  {
+    "name": "中国之声 CNR-1",
+    "url": "http://ngcdn001.cnr.cn/live/zgzs/index.m3u8",
+    "lang": "zh",
+    "genre": "新闻综合",
+    "verifiedAt": "2026-10-12",
+    "verifiedBy": "curl -r 0-2047 -> HTTP 206, 56ms, application/vnd.apple.mpegurl"
+  },
+  {
+    "name": "经济之声 CNR-2",
+    "url": "http://ngcdn002.cnr.cn/live/jjzs/index.m3u8",
+    "lang": "zh",
+    "genre": "财经",
+    "verifiedAt": "2026-10-12",
+    "verifiedBy": "curl -r 0-2047 -> HTTP 206, 133ms, application/vnd.apple.mpegurl"
+  },
+  {
+    "name": "BBC World Service",
+    "url": "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service",
+    "lang": "en",
+    "genre": "国际新闻",
+    "verifiedAt": "2026-10-12",
+    "verifiedBy": "curl -> HTTP 200, 15s 收到 159590 字节（持续流截断属正常）"
+  },
+  {
+    "name": "Classic FM (UK)",
+    "url": "https://media-ssl.musicradio.com/ClassicFMMP3",
+    "lang": "en",
+    "genre": "古典音乐",
+    "verifiedAt": "2026-10-12",
+    "verifiedBy": "curl -> HTTP 200, 15s 收到 433637 字节"
+  },
+  {
+    "name": "Radio Paradise",
+    "url": "https://stream.radioparadise.com/mp3-192",
+    "lang": "en",
+    "genre": "摇滚/综合音乐",
+    "verifiedAt": "2026-10-12",
+    "verifiedBy": "curl -> HTTP 200, 15s 收到 261455 字节"
+  }
+]
