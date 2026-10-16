@@ -1,4 +1,4 @@
-# guichu-radio — 命令行网络收音机
+# 📻 鬼畜 · 赛博收音机 — NetRadio-CLI：命令行网络电台（mpv + Node.js，内置电台国内实测可播）
 
 **EN** — A command-line internet radio player (mpv + Node.js): search stations globally, change volume without restarting playback.
 
