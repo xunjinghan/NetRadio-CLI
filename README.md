@@ -1,5 +1,7 @@
 # NetRadio-CLI — 命令行网络收音机
 
+**EN** — A command-line internet radio player (mpv + Node.js): search stations globally, change volume without restarting playback.
+
 > 一个用 Node.js + mpv 写的命令行网络收音机。全球几万个电台，一行命令收听，调音量不打断播放。
 
 ![Node.js](https://img.shields.io/badge/node-16+-green)
@@ -136,7 +138,7 @@ sudo pacman -S mpv      # Arch
 ### 3. 克隆并运行
 
 ```bash
-git clone https://github.com/xunjinghan/NetRadio-CLI.git
+git clone https://github.com/xunwmw/NetRadio-CLI.git
 cd NetRadio-CLI
 node radio.mjs list
 ```
@@ -220,9 +222,9 @@ NetRadio-CLI/
 
 ## 相关项目
 
-- [bounty-forge](https://github.com/xunjinghan/bounty-forge) — AI 驱动漏洞挖掘知识库与实战工具集
-- [WebVulnLab](https://github.com/xunjinghan/WebVulnLab) — 自研 Web 漏洞靶场
-- [VulnScope](https://github.com/xunjinghan/VulnScope) — AI 自动化漏洞挖掘工具集
+- [bounty-forge](https://github.com/xunwmw/bounty-forge) — AI 驱动漏洞挖掘知识库与实战工具集
+- [WebVulnLab](https://github.com/xunwmw/WebVulnLab) — 自研 Web 漏洞靶场
+- [VulnScope](https://github.com/xunwmw/VulnScope) — AI 自动化漏洞挖掘工具集
 
 ---
 
