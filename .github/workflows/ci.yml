@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  node-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 语法检查
+        run: node --check radio.mjs
+
+      - name: --help 冒烟
+        run: node radio.mjs --help
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 凭据扫描
+        run: |
+          set -e
+          PATTERNS='github_pat_|ghp_[A-Za-z0-9]{30,}|sk-[A-Za-z0-9]{32,}|AIza[A-Za-z0-9_-]{30,}'
+          if grep -rInE "$PATTERNS" --exclude-dir=.git . ; then
+            echo "::error::发现疑似凭据"
+            exit 1
+          fi
+          echo "OK"
