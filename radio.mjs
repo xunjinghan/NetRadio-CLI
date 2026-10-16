@@ -23,28 +23,38 @@ import { fileURLToPath } from 'node:url';
 const DIR = path.dirname(fileURLToPath(import.meta.url));
 const STATE_FILE = path.join(DIR, '.state.json');
 const LOG_FILE = path.join(DIR, 'mpv.log');
-const PIPE = '\\\\.\\pipe\\dshtools-radio';
+const IS_WIN = process.platform === 'win32';
+// Windows 用命名管道；macOS / Linux 用 Unix socket（mpv 的 --input-ipc-server 两种都吃）
+const PIPE = IS_WIN ? '\\\\.\\pipe\\dshtools-radio' : path.join(DIR, '.mpv-ipc.sock');
 const PIPE_ARG = '--input-ipc-server=' + PIPE;
 
 function findMpv() {
-  // 1. PATH 里找
-  const pathDirs = (process.env.PATH || '').split(';');
+  const bin = IS_WIN ? 'mpv.exe' : 'mpv';
+  // 1. PATH 里找（分隔符按平台，Windows 是 ; 其他是 :）
+  const pathDirs = (process.env.PATH || '').split(path.delimiter).filter(Boolean);
   for (const d of pathDirs) {
-    const p = path.join(d, 'mpv.exe');
+    const p = path.join(d, bin);
     if (fs.existsSync(p)) return p;
   }
-  // 2. scoop 常见安装路径（用 %USERPROFILE%，不硬编码用户名）
-  const userProfile = process.env.USERPROFILE || 'C:\\Users\\<user>';
-  const shim = path.join(userProfile, 'scoop', 'shims', 'mpv.exe');
-  if (fs.existsSync(shim)) return shim;
-  const apps = path.join(userProfile, 'scoop', 'apps', 'mpv');
-  if (fs.existsSync(apps)) {
-    for (const v of fs.readdirSync(apps)) {
-      const p = path.join(apps, v, 'mpv.exe');
-      if (fs.existsSync(p)) return p;
+  if (IS_WIN) {
+    // 2. scoop 常见安装路径（用 %USERPROFILE%，不硬编码用户名）
+    const userProfile = process.env.USERPROFILE || 'C:\\Users\\<user>';
+    const shim = path.join(userProfile, 'scoop', 'shims', 'mpv.exe');
+    if (fs.existsSync(shim)) return shim;
+    const apps = path.join(userProfile, 'scoop', 'apps', 'mpv');
+    if (fs.existsSync(apps)) {
+      for (const v of fs.readdirSync(apps)) {
+        const p = path.join(apps, v, 'mpv.exe');
+        if (fs.existsSync(p)) return p;
+      }
     }
+    throw new Error('找不到 mpv.exe，先运行：scoop install mpv  或  choco install mpv');
   }
-  throw new Error('找不到 mpv.exe，先运行：scoop install mpv  或  choco install mpv');
+  // 3. macOS / Linux 常见路径
+  for (const p of ['/usr/bin/mpv', '/usr/local/bin/mpv', '/opt/homebrew/bin/mpv', '/snap/bin/mpv']) {
+    if (fs.existsSync(p)) return p;
+  }
+  throw new Error('找不到 mpv，先安装：brew install mpv（macOS）/ sudo apt install mpv（Debian、Ubuntu）/ sudo pacman -S mpv（Arch）');
 }
 
 function loadStations() {
@@ -65,7 +75,11 @@ function isAlive(pid) {
 
 function killTree(pid) {
   if (!pid) return;
-  spawnSync('taskkill', ['/PID', String(pid), '/T', '/F'], { stdio: 'ignore' });
+  if (IS_WIN) {
+    spawnSync('taskkill', ['/PID', String(pid), '/T', '/F'], { stdio: 'ignore' });
+    return;
+  }
+  try { process.kill(pid, 'SIGTERM'); } catch {}
 }
 
 function stop(silent) {
@@ -84,6 +98,7 @@ function play(station, volume) {
   const st = readState();
   const vol = volume ?? st?.volume ?? 80;
   stop(true);
+  if (!IS_WIN) { try { fs.unlinkSync(PIPE); } catch {} }   // 清掉上次残留的 socket
 
   const args = [
     '--no-video', '--force-window=no', '--really-quiet',
@@ -163,14 +178,38 @@ function list() {
   console.log('\nplay 也支持直接给关键词或完整 URL，例如：node radio.mjs play bbc');
 }
 
+// radio-browser 有多个镜像节点，国内网络下逐个降级（de1 通、all/nl1 常被重置，2026-10-16 实测）
+const RADIO_BROWSER_NODES = [
+  process.env.RADIO_BROWSER_API,
+  'https://de1.api.radio-browser.info',
+  'https://all.api.radio-browser.info',
+  'https://nl1.api.radio-browser.info',
+].filter(Boolean);
+
 async function search(q, limit) {
-  const url = `https://de1.api.radio-browser.info/json/stations/search?name=${encodeURIComponent(q)}&limit=${limit}&hidebroken=true`;
-  const res = await fetch(url, { headers: { 'User-Agent': 'dsh-radio/1.0' } });
-  if (!res.ok) throw new Error('目录服务返回 HTTP ' + res.status);
-  const arr = await res.json();
-  if (!arr.length) return console.log('没搜到结果。');
-  console.log(`搜索结果（共显示 ${arr.length} 条，play 时直接粘 URL）：`);
-  arr.forEach((s, i) => console.log(`  [${i + 1}] ${s.name} · ${s.country || '?'} · ${s.codec || '?'} · ${s.url_resolved}`));
+  const failed = [];
+  for (const base of RADIO_BROWSER_NODES) {
+    const url = `${base}/json/stations/search?name=${encodeURIComponent(q)}&limit=${limit}&hidebroken=true`;
+    try {
+      const res = await fetch(url, {
+        headers: { 'User-Agent': 'dsh-radio/1.0' },
+        signal: AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined,
+      });
+      if (!res.ok) { failed.push(`${base} → HTTP ${res.status}`); continue; }
+      const arr = await res.json();
+      if (!arr.length) return console.log('没搜到结果。');
+      console.log(`搜索结果（共显示 ${arr.length} 条，play 时直接粘 URL）：`);
+      arr.forEach((s, i) => console.log(`  [${i + 1}] ${s.name} · ${s.country || '?'} · ${s.codec || '?'} · ${s.url_resolved}`));
+      return;
+    } catch (e) {
+      failed.push(`${base} → ${e.message}`);
+    }
+  }
+  throw new Error(
+    '所有目录节点都没连上（国内网络下很常见，可以只用自己的 stations.json）：\n  ' +
+    failed.join('\n  ') +
+    '\n  想指定节点：设置环境变量 RADIO_BROWSER_API=https://de1.api.radio-browser.info'
+  );
 }
 
 function resolveTarget(target) {

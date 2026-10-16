@@ -138,7 +138,10 @@ sudo pacman -S mpv      # Arch
 
 ### 2. 安装 Node.js
 
-需要 Node.js 16+。从 [nodejs.org](https://nodejs.org/) 下载或用包管理器安装。
+需要 **Node.js 18+**（用到了全局 `fetch`，16/17 没有这个 API）。从 [nodejs.org](https://nodejs.org/) 下载或用包管理器安装。
+
+> 不需要 `npm install` —— 这个项目零第三方依赖，只要 Node 能跑 `.mjs` 就行。
+> 国内下载 `nodejs.org` 实测可直连（706 ms），不用挂代理。
 
 ### 3. 克隆并运行
 
@@ -160,13 +163,15 @@ node radio.mjs list
     "name": "电台名称",
     "url": "https://stream-url.com/stream",
     "genre": "类型",
-    "verified": "2026-10-12",
-    "note": "实测备注"
+    "lang": "zh",
+    "verifiedAt": "2026-10-12",
+    "verifiedBy": "curl -r 0-2047 -> HTTP 206, 56ms, application/vnd.apple.mpegurl"
   }
 ]
 ```
 
-建议添加前先用 `curl -I` 测试连通性。
+字段说明：`name` / `url` 必填，`lang` / `genre` 用于 `list` 展示，`verifiedAt` + `verifiedBy` 记录"谁在什么时候用什么命令验证过"。
+建议添加前先实测连通性，例如 `curl -r 0-2047 <url>`（看到 200/206 且拿到字节就算通）。
 
 ---
 
@@ -236,3 +241,33 @@ NetRadio-CLI/
 ## 许可证
 
 [MIT License](LICENSE)
+
+---
+
+## 平台支持与网络（国内实测）
+
+| 平台 | 状态 |
+| --- | --- |
+| Windows | ✅ 实测可用（命名管道 + `taskkill`） |
+| macOS / Linux | ⚠️ 代码分支已写（Unix socket + `SIGTERM`），但**我没在真机验证过**，欢迎反馈 |
+
+内置 5 个电台在**中国大陆不开代理**时实测**全部可播**（CNR 186/382 ms，BBC 1229 ms，Classic FM 970 ms，Radio Paradise 1795 ms）；
+搜台目录 `de1.api.radio-browser.info` 可用（893 ms），其他节点不通 —— 代码已做节点降级。
+完整实测表、常见报错对照见 [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md)。
+
+---
+
+## 反馈 · 合作
+
+> 如果你在使用时发现了任何问题，可以给我发消息或者私信我。不过最好不要私信，本人社恐。欢迎大佬给我的项目提意见。
+> 如果你使用时发生了错误或者没法使用，也可以修改我的项目。申请项目合作人。
+
+| 你想做的事 | 点哪里 |
+| --- | --- |
+| 不出声 / 报错 | [提 Bug 报告](https://github.com/xunwmw/NetRadio-CLI/issues/new?template=bug_report.md) |
+| 想要新功能 / 提意见 | [提功能建议](https://github.com/xunwmw/NetRadio-CLI/issues/new?template=feature_request.md) |
+| **想一起做这个项目（申请项目合作人）** | [提交合作者申请](https://github.com/xunwmw/NetRadio-CLI/issues/new?template=collaborator_request.md) |
+| 已经改好了 | 直接发 Pull Request |
+
+「申请项目合作人」就是 GitHub 的仓库协作者（Collaborator）：你提申请，我会在 **Settings → Collaborators** 里把你加进来，
+通过后你有这个仓库的写权限（能建分支、提 PR、管 Issue），比一直 fork 省事。
