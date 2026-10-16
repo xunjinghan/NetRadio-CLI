@@ -1,6 +1,6 @@
 # 安全政策 · Security Policy
 
-NetRadio-CLI 是本地命令行电台播放器（Node.js + mpv），不涉及服务端与账号体系。
+guichu-radio 是本地命令行电台播放器（Node.js + mpv），不涉及服务端与账号体系。
 
 ## 报告问题
 

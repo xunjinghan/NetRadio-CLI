@@ -39,7 +39,7 @@ sudo apt install mpv  # Debian / Ubuntu
 | Windows | ✅ **我实测过**（播放、调音量、切台、日志都测过） | 命名管道 `\\.\pipe\dshtools-radio` + `taskkill` + 找 `mpv.exe` |
 | macOS / Linux | ⚠️ **代码分支已写，但我没在真机验证过** | Unix socket `.mpv-ipc.sock` + `SIGTERM` + 找 `mpv`（`/usr/bin`、`/opt/homebrew/bin` 等） |
 
-macOS / Linux 用户如果 `play` 或 `volume` 出问题，欢迎 [提 Issue](https://github.com/xunwmw/NetRadio-CLI/issues/new?template=bug_report.md)
+macOS / Linux 用户如果 `play` 或 `volume` 出问题，欢迎 [提 Issue](https://github.com/xunwmw/guichu-radio/issues/new?template=bug_report.md)
 （把 `node --version`、`mpv --version`、报错原文发我），我照着修。
 
 ---

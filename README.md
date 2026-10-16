@@ -1,4 +1,4 @@
-# NetRadio-CLI — 命令行网络收音机
+# guichu-radio — 命令行网络收音机
 
 **EN** — A command-line internet radio player (mpv + Node.js): search stations globally, change volume without restarting playback.
 
@@ -146,8 +146,8 @@ sudo pacman -S mpv      # Arch
 ### 3. 克隆并运行
 
 ```bash
-git clone https://github.com/xunwmw/NetRadio-CLI.git
-cd NetRadio-CLI
+git clone https://github.com/xunwmw/guichu-radio.git
+cd guichu-radio
 node radio.mjs list
 ```
 
@@ -220,7 +220,7 @@ node radio.mjs list
 ## 项目结构
 
 ```
-NetRadio-CLI/
+guichu-radio/
 ├── radio.mjs       # 主程序（~200 行）
 ├── stations.json   # 内置电台列表（全部实测过）
 ├── README.md       # 本文件
@@ -232,9 +232,9 @@ NetRadio-CLI/
 
 ## 相关项目
 
-- [bounty-forge](https://github.com/xunwmw/bounty-forge) — AI 驱动漏洞挖掘知识库与实战工具集
-- [WebVulnLab](https://github.com/xunwmw/WebVulnLab) — 自研 Web 漏洞靶场
-- [VulnScope](https://github.com/xunwmw/VulnScope) — AI 自动化漏洞挖掘工具集
+- [vuln-xiuxian](https://github.com/xunwmw/vuln-xiuxian) — AI 驱动漏洞挖掘知识库与实战工具集
+- [onefile-vuln-lab](https://github.com/xunwmw/onefile-vuln-lab) — 自研 Web 漏洞靶场
+- [shoucuo-vuln-bot](https://github.com/xunwmw/shoucuo-vuln-bot) — AI 自动化漏洞挖掘工具集
 
 ---
 
@@ -264,9 +264,9 @@ NetRadio-CLI/
 
 | 你想做的事 | 点哪里 |
 | --- | --- |
-| 不出声 / 报错 | [提 Bug 报告](https://github.com/xunwmw/NetRadio-CLI/issues/new?template=bug_report.md) |
-| 想要新功能 / 提意见 | [提功能建议](https://github.com/xunwmw/NetRadio-CLI/issues/new?template=feature_request.md) |
-| **想一起做这个项目（申请项目合作人）** | [提交合作者申请](https://github.com/xunwmw/NetRadio-CLI/issues/new?template=collaborator_request.md) |
+| 不出声 / 报错 | [提 Bug 报告](https://github.com/xunwmw/guichu-radio/issues/new?template=bug_report.md) |
+| 想要新功能 / 提意见 | [提功能建议](https://github.com/xunwmw/guichu-radio/issues/new?template=feature_request.md) |
+| **想一起做这个项目（申请项目合作人）** | [提交合作者申请](https://github.com/xunwmw/guichu-radio/issues/new?template=collaborator_request.md) |
 | 已经改好了 | 直接发 Pull Request |
 
 「申请项目合作人」就是 GitHub 的仓库协作者（Collaborator）：你提申请，我会在 **Settings → Collaborators** 里把你加进来，
