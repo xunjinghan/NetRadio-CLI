@@ -1,23 +1,10 @@
-# 更新日志
+﻿# Changelog
 
-本项目所有重要变更都记录在此文件中。
+## v1.0.0 — 2026-10-16
 
-格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，
-版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
+首个公开版本。
 
-## [Unreleased]
+- 命令行网络电台：mpv + Node.js，全局电台搜索、音量热调
+- 新增：SECURITY.md
+- 新增 CI：语法检查 + --help 冒烟 + 凭据扫描
 
-### 新增
-### 修复
-### 变更
-### 废弃
-
----
-
-## [1.0.0] - 2026-10-13
-
-### 新增
-- 初始版本发布
-- 核心功能模块
-- 安全护栏与审计日志
-- 结构化证据存储
