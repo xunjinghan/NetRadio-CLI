@@ -1,4 +1,4 @@
-name: CI
+﻿name: CI
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
         run: |
           set -e
           PATTERNS='github_pat_|ghp_[A-Za-z0-9]{30,}|sk-[A-Za-z0-9]{32,}|AIza[A-Za-z0-9_-]{30,}'
-          if grep -rInE "$PATTERNS" --exclude-dir=.git . ; then
+          if grep -rInE "$PATTERNS" --exclude-dir=.git --exclude-dir=.github . ; then
             echo "::error::发现疑似凭据"
             exit 1
           fi
