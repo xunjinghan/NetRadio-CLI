@@ -34,7 +34,7 @@ function findMpv() {
     if (fs.existsSync(p)) return p;
   }
   // 2. scoop 常见安装路径（用 %USERPROFILE%，不硬编码用户名）
-  const userProfile = process.env.USERPROFILE || 'C:\\Users\\Administrator';
+  const userProfile = process.env.USERPROFILE || 'C:\\Users\\<user>';
   const shim = path.join(userProfile, 'scoop', 'shims', 'mpv.exe');
   if (fs.existsSync(shim)) return shim;
   const apps = path.join(userProfile, 'scoop', 'apps', 'mpv');
